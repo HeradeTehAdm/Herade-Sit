@@ -4,12 +4,14 @@
   "version": "${version}",
   "name": "Herade Sit",
   "description": "Позволяет игрокам садиться на ступеньки и полублоки с помощью команды /sit.",
-  "authors": ["HeradeTehAdm"],
+  "authors": [
+    "HeradeTehAdm"
+  ],
   "contact": {
     "sources": "https://github.com/HeradeTehAdm/Herade-Sit"
   },
   "license": "MIT",
-  "environment": "*",
+  "environment": "server",
   "entrypoints": {
     "main": [
       "ru.herade.sit.HeradeSit"
@@ -17,7 +19,7 @@
   },
   "depends": {
     "fabricloader": ">=0.20.1",
-    "minecraft": "~26.3-",
+    "minecraft": "~26.3",
     "java": ">=25",
     "fabric-api": "*"
   }
