@@ -25,3 +25,10 @@ jobs:
 
       - name: Собрать мод
         run: gradle build --no-daemon
+
+      - name: Сохранить JAR-файлы сборки
+        uses: actions/upload-artifact@v4
+        with:
+          name: Herade-Sit-Minecraft-26.3
+          path: build/libs/*.jar
+          if-no-files-found: error
