@@ -111,6 +111,7 @@ public final class HeradeSit implements ModInitializer {
         }
 
         double localX = hitLocation.x - blockPos.getX();
+        double localY = hitLocation.y - blockPos.getY();
         double localZ = hitLocation.z - blockPos.getZ();
 
         AABB selectedBox = null;
@@ -120,21 +121,26 @@ public final class HeradeSit implements ModInitializer {
         for (AABB box : shape.toAabbs()) {
             boolean containsHit = localX >= box.minX - 1.0E-4
                 && localX <= box.maxX + 1.0E-4
+                && localY >= box.minY - 1.0E-4
+                && localY <= box.maxY + 1.0E-4
                 && localZ >= box.minZ - 1.0E-4
                 && localZ <= box.maxZ + 1.0E-4;
 
             double clampedX = clamp(localX, box.minX, box.maxX);
+            double clampedY = clamp(localY, box.minY, box.maxY);
             double clampedZ = clamp(localZ, box.minZ, box.maxZ);
             double dx = localX - clampedX;
+            double dy = localY - clampedY;
             double dz = localZ - clampedZ;
-            double distance = dx * dx + dz * dz;
+            double distance = dx * dx + dy * dy + dz * dz;
 
             if (containsHit) {
-                if (!foundContainingBox || selectedBox == null || box.maxY > selectedBox.maxY) {
-                    selectedBox = box;
-                    foundContainingBox = true;
-                }
-            } else if (!foundContainingBox && distance < nearestDistance) {
+                selectedBox = box;
+                foundContainingBox = true;
+                break;
+            }
+
+            if (!foundContainingBox && distance < nearestDistance) {
                 selectedBox = box;
                 nearestDistance = distance;
             }
@@ -144,8 +150,9 @@ public final class HeradeSit implements ModInitializer {
             return null;
         }
 
-        double x = clamp(localX, selectedBox.minX + 0.12, selectedBox.maxX - 0.12);
-        double z = clamp(localZ, selectedBox.minZ + 0.12, selectedBox.maxZ - 0.12);
+        // Ставим место в центре выбранной верхней поверхности, чтобы игрок не сваливался с края.
+        double x = (selectedBox.minX + selectedBox.maxX) * 0.5;
+        double z = (selectedBox.minZ + selectedBox.maxZ) * 0.5;
         double y = selectedBox.maxY;
 
         return new Vec3(blockPos.getX() + x, blockPos.getY() + y, blockPos.getZ() + z);
