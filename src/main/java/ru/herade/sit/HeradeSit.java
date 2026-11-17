@@ -177,7 +177,7 @@ public final class HeradeSit implements ModInitializer {
         ArmorStand seat = new ArmorStand(level, surfacePosition.x, surfacePosition.y, surfacePosition.z);
         seat.setInvisible(true);
         seat.setNoGravity(true);
-        seat.setInvulnerable(true);
+        seat.setPermanentlyInvulnerable(true);
         seat.setSilent(true);
         seat.setNoBasePlate(true);
         seat.setShowArms(false);
