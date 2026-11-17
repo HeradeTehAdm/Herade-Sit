@@ -11,7 +11,7 @@
     "sources": "https://github.com/HeradeTehAdm/Herade-Sit"
   },
   "license": "MIT",
-  "environment": "server",
+  "environment": "*",
   "entrypoints": {
     "main": [
       "ru.herade.sit.HeradeSit"
