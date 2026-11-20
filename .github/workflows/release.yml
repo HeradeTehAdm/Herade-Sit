@@ -1,0 +1,31 @@
+name: Публикация тестового JAR
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/release.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '25'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.8.2'
+      - name: Build JAR
+        run: gradle build --no-daemon
+      - name: Publish beta release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v0.1.0-beta.1 build/libs/herade-sit-0.1.0.jar --title "Herade Sit 0.1.0 Beta 1" --notes "Тестовая сборка для Minecraft 26.3 Fabric. Команда /sit включает посадку на ступеньки и полублоки. Игровое тестирование ещё продолжается." --prerelease --target "$GITHUB_SHA"
