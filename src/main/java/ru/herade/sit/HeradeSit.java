@@ -166,10 +166,18 @@ public final class HeradeSit implements ModInitializer {
     }
 
     private static boolean createSeat(ServerPlayer player, ServerLevel level, Vec3 surfacePosition) {
+        // Не разрешаем посадку, если над выбранной поверхностью недостаточно места для игрока.
+        Vec3 playerOffset = surfacePosition.subtract(player.position());
+        AABB targetPlayerBox = player.getBoundingBox().move(playerOffset);
+        if (!level.noCollision(player, targetPlayerBox)) {
+            player.sendSystemMessage(Component.literal("§cЗдесь недостаточно места, чтобы сесть."));
+            return false;
+        }
+
         ArmorStand seat = new ArmorStand(level, surfacePosition.x, surfacePosition.y, surfacePosition.z);
         seat.setInvisible(true);
         seat.setNoGravity(true);
-        seat.setInvulnerable(true);
+        seat.setPermanentlyInvulnerable(true);
         seat.setSilent(true);
         seat.setNoBasePlate(true);
         seat.setShowArms(false);
